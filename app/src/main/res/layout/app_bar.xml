@@ -4,20 +4,22 @@
     android:layout_height="match_parent">
 
     <!-- Settings button on the left-->
-    <ImageView
+    <ImageButton
         android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_settings"
+        android:background="@color/transparent"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true" />
 
     <!-- Notifications button on the right -->
-    <ImageView
+    <ImageButton
         android:id="@+id/notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_notifications"
+        android:background="@color/transparent"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true" />
 
