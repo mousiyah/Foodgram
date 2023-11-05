@@ -28,9 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"/>
 
-        <!-- Review example
-        TODO replace with RecyclerView -->
-        <include layout="@layout/item_review"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reviewsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
