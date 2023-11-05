@@ -39,12 +39,15 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.navigation_home -> {
                     // Set the app bar layout for the HomeFragment
-                    setupAppBar(R.layout.app_bar)
+                    setupAppBar(R.layout.app_bar_home)
+                }
+                R.id.navigation_browse -> {
+                    // Set the app bar layout for the HomeFragment
+                    supportActionBar?.hide()
                 }
                 R.id.navigation_profile -> {
                     // Set the app bar layout for the ProfileFragment
                     supportActionBar?.hide()
-                    //setupAppBar(R.layout.app_bar_profile)
                 }
             }
         }

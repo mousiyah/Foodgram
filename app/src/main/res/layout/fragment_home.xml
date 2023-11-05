@@ -17,7 +17,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- Search Box -->
-        <include layout="@layout/item_search_box"
+        <include layout="@layout/item_searchbar_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"/>

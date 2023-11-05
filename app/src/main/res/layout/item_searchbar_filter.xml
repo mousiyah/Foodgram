@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Search box structure -->
+
+<com.google.android.material.textfield.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_search_box"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_search" />
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/searchEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:inputType="text"
+            android:textSize="12sp"
+            android:hint="Search by restaurant, food name"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_filter"
+                android:background="@color/transparent"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.textfield.TextInputLayout>

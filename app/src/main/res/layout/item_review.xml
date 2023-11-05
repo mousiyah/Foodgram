@@ -94,10 +94,17 @@
 
             </LinearLayout>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#sushi"
+                    android:layout_gravity="end"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="12sp" />
+
             <!-- Review description -->
 
                 <TextView
-                    android:id="@+id/text_post_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="The best sushi place I have ever been to. Good for family gatherings. Portions are good size and they served us free tea 🍣☕️ Definitely will come back again"

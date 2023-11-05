@@ -28,7 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:text="Login to your profile"
-            android:textSize="22sp" />
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,7 +128,7 @@
             android:text="Continue with Email"
             android:textSize="12sp"
             android:textAllCaps="false"
-            android:backgroundTint="@color/light_grey"
+            android:backgroundTint="@color/btn_bg_grey"
             android:textColor="@color/black"/>
 
         <com.google.android.material.button.MaterialButton
@@ -141,7 +143,7 @@
             android:text="Continue with Google"
             android:textSize="12sp"
             android:textAllCaps="false"
-            android:backgroundTint="@color/light_grey"
+            android:backgroundTint="@color/btn_bg_grey"
             android:textColor="@color/black" />
 
     </LinearLayout>
