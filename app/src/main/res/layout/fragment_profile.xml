@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.ProfileFragment">
 
-    <include layout="@layout/item_register"></include>
+    <include layout="@layout/item_login"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

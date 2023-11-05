@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setupBinding()
-        setupAppBar()
         setupNavigation()
     }
 
@@ -25,15 +24,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    private fun setupAppBar() {
+    private fun setupAppBar(appBarID: Int) {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.app_bar)
+        supportActionBar?.setCustomView(appBarID)
+        supportActionBar?.show()
     }
 
     private fun setupNavigation() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_home -> {
+                    // Set the app bar layout for the HomeFragment
+                    setupAppBar(R.layout.app_bar)
+                }
+                R.id.navigation_profile -> {
+                    // Set the app bar layout for the ProfileFragment
+                    supportActionBar?.hide()
+                    //setupAppBar(R.layout.app_bar_profile)
+                }
+            }
+        }
     }
 
 }

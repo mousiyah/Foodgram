@@ -7,6 +7,15 @@
     android:orientation="vertical"
     android:padding="10dp">
 
+    <TextView
+        style="@style/AppBarTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/app_name"
+        android:textColor="?attr/colorPrimary"
+        android:layout_marginBottom="10dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,33 +87,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="end"
         android:layout_gravity="center_vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="Forgot password?"
-                android:textSize="12sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reset"
+                android:text="Forgot password"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="horizontal">
+                android:textSize="12sp"
+                android:layout_marginEnd="20dp"/>
 
             <Button
                 android:layout_width="wrap_content"
@@ -112,7 +104,7 @@
                 android:text="Log in"
                 android:textAllCaps="false"
                 android:textSize="12sp" />
-        </LinearLayout>
+
 
     </LinearLayout>
 

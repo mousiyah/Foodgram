@@ -2,7 +2,6 @@
 <resources>
     <style name="AppBarTitle">
         <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">@font/title</item>
     </style>
 
