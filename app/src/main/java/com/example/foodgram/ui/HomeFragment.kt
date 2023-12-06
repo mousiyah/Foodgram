@@ -1,5 +1,6 @@
 package com.example.foodgram.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodgram.AddActivity
+import com.example.foodgram.AuthManager
+import com.example.foodgram.MainActivity
 import com.example.foodgram.R
+import com.example.foodgram.databinding.FragmentHomeBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment() {
+
+    private lateinit var binding: FragmentHomeBinding
+
+    private lateinit var addButton: FloatingActionButton
 
     private lateinit var reviewsRecyclerView: RecyclerView
     private lateinit var reviewAdapter: ReviewAdapter
@@ -21,16 +31,44 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        reviewsRecyclerView = root.findViewById(R.id.reviewsRecyclerView)
+        initializeViews()
+        setupListeners()
+        updateUI()
+
+        reviewsRecyclerView = binding.reviewsRecyclerView
         reviewsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         populateReviews()
             reviewAdapter = ReviewAdapter(requireContext(), reviewList)
         reviewsRecyclerView.adapter = reviewAdapter
 
-        return root
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
+    private fun initializeViews() {
+        addButton = binding.addButton
+    }
+
+    private fun setupListeners() {
+        addButton.setOnClickListener { addButtonClicked() }
+    }
+
+    private fun updateUI() {
+        if (AuthManager.isGuestMode()){
+            addButton.visibility = View.GONE
+        } else{
+            addButton.visibility = View.VISIBLE
+        }
+    }
+
+    private fun addButtonClicked() {
+        startActivity(Intent(requireContext(), AddActivity::class.java))
     }
 
     private fun populateReviews(){
@@ -64,11 +102,5 @@ class HomeFragment : Fragment() {
             // Add more ReviewItem objects as needed
         )
 
-    }
-
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }

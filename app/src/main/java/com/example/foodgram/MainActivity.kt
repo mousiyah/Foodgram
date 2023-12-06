@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navigation_profile -> {
                     // Set the app bar layout for the ProfileFragment
-                    supportActionBar?.hide()
+                    setupAppBar(R.layout.app_bar_home)
                 }
             }
         }

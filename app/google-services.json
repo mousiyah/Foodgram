@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "848686492236",
+    "project_id": "foodgram-14120",
+    "storage_bucket": "foodgram-14120.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848686492236:android:598637f85bea3670c762e9",
+        "android_client_info": {
+          "package_name": "com.example.foodgram"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4uZV58QvYucq3uSZQuOoIp_OyVFxcS2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,29 @@
 <resources>
     <string name="app_name">Foodgram</string>
     <string name="empty_string"> </string>
+
+
+
+    <string name="empty_fields_error">Please fill in all fields</string>
+    <string name="password_mismatch_error">Passwords don\'t match</string>
+    <string name="wrong_credentials">Wrong credentials</string>
+    <string name="registration_successful">Registration successful</string>
+    <string name="registration_failed">Registration failed</string>
+
+    <string name="profile_signIn_message">Please sign in to view your profile</string>
+    <string name="sign_in">Sign in</string>
+    <string name="log_out">Log out</string>
+    <string name="greeting">Hello,</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="register">Register</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="have_an_account">Have an account?</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="log_in">Log in</string>
+    <string name="continue_as_guest">Continue as guest</string>
 </resources>

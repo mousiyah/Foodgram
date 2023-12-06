@@ -5,4 +5,9 @@
         <item name="android:fontFamily">@font/title</item>
     </style>
 
+    <style name="secondaryBtn">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>
