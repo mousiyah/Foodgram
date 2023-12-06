@@ -57,7 +57,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="username"
+        android:hint="email"
         app:startIconDrawable="@drawable/ic_profile"
         android:layout_marginBottom="12sp">
 
@@ -114,38 +114,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:insetLeft="0dp"
-            android:insetRight="0dp"
-            app:icon="@drawable/ic_email"
-            app:iconSize="21dp"
-            app:iconTint="@color/black"
-            app:iconGravity="start"
-            android:text="Continue with Email"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/btn_bg_grey"
-            android:textColor="@color/black"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:insetLeft="0dp"
-            android:insetRight="0dp"
-            app:icon="@drawable/ic_google"
-            app:iconSize="21dp"
-            app:iconTint="@null"
-            app:iconGravity="start"
-            android:text="Continue with Google"
-            android:textSize="12sp"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/btn_bg_grey"
-            android:textColor="@color/black" />
-
-    </LinearLayout>
+        android:orientation="vertical"/>
 
 </LinearLayout>
