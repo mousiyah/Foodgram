@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="10dp">
+    android:gravity="start"
+    android:padding="30dp">
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/loginTitleTextView"
-        android:text="Add a review"
+        android:text="Add a restaurant review"
         android:textSize="24sp"
         android:textColor="@color/black"
         android:layout_gravity="start"
@@ -23,50 +28,129 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="#mealName"
-        android:id="@+id/usernameTextField"
+        android:hint="Restaurant/Brand name *"
+        android:id="@+id/restaurantNameTextField"
         android:layout_marginBottom="12sp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="12sp"
             android:maxLines="1"
             android:inputType="text|textCapSentences"
-            android:id="@+id/usernameEditText"/>
+            android:dropDownHeight="wrap_content"
+            android:id="@+id/restaurantNameEditText"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        app:cardElevation="2dp"
-        app:cardCornerRadius="4dp">
-
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/restaurantLocationTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type your review..."
-            app:boxBackgroundMode="outline">
+            android:hint="Restaurant location *">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/reviewContentEditText"
+            <AutoCompleteTextView
+                android:id="@+id/restaurantLocationAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:minLines="10"
-                android:gravity="top"
-                android:background="@color/white"/>
+                android:dropDownHeight="wrap_content"
+                android:inputType="text|textCapSentences"
+                android:maxLines="1"
+                android:padding="16dp"
+                android:textSize="12sp" />
+
         </com.google.android.material.textfield.TextInputLayout>
-    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/clearLocationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Location"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="12sp"
+        android:layout_gravity="end"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tag #foodname you had *"
+        android:id="@+id/foodNameTextField"
+        android:layout_marginBottom="12sp">
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:inputType="text|textCapSentences"
+            android:padding="16dp"
+            android:dropDownHeight="wrap_content"
+            android:id="@+id/foodNameEditText"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rate your experience"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_gravity="start"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="3dp"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginBottom="10dp"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:stepSize="0.5" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type your review... *"
+        android:id="@+id/reviewContentTextField"
+        android:layout_marginBottom="12sp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:minLines="10"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:id="@+id/reviewContentEditText"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/imageUploadButton"
+        android:id="@+id/uploadImageButton"
         style="@style/secondaryBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upload Images"
         android:layout_gravity="start"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:layout_marginBottom="10dp" />
+
+    <GridView
+        android:id="@+id/uploadedImagesGridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="3"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="8dp"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -92,4 +176,7 @@
             android:textAllCaps="false"
             android:textSize="12sp" />
     </LinearLayout>
+
 </LinearLayout>
+
+</ScrollView>
