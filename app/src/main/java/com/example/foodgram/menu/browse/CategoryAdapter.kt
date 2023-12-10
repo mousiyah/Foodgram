@@ -1,4 +1,4 @@
-package com.example.foodgram.ui
+package com.example.foodgram.menu.browse
 
 import android.view.LayoutInflater
 import android.view.View

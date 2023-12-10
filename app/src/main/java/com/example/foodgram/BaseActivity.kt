@@ -1,12 +1,18 @@
 package com.example.foodgram
 
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import com.example.foodgram.databinding.ActivityAddBinding
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
+
+    private lateinit var loading: LinearLayout
+
+    protected val mediaAccessPermissionCode = 102
+    protected val mapSelectionRequestCode = 103
 
     fun setupAppBar(appBarID: Int) {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
@@ -15,18 +21,33 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun hideKeyboard() {
-        currentFocus?.let { view ->
-            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
     }
+
+
+    open fun clearFocusFromAllForms() {}
 
     // Hide keyboard on screen touch
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (ev?.action == MotionEvent.ACTION_DOWN) {
+            clearFocusFromAllForms()
             hideKeyboard()
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    // Loading
+    fun setLoading(loadingItem: LinearLayout) {
+        loading = loadingItem
+    }
+
+    fun loadingStart() {
+        loading.visibility = View.VISIBLE
+    }
+
+    fun loadingEnd() {
+        loading.visibility = View.GONE
     }
 
 }

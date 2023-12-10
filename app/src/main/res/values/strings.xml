@@ -2,8 +2,6 @@
     <string name="app_name">Foodgram</string>
     <string name="empty_string"> </string>
 
-
-
     <string name="empty_fields_error">Please fill in all fields</string>
     <string name="password_mismatch_error">Passwords don\'t match</string>
     <string name="wrong_credentials">Wrong credentials</string>
@@ -26,4 +24,21 @@
     <string name="forgot_password">Forgot password</string>
     <string name="log_in">Log in</string>
     <string name="continue_as_guest">Continue as guest</string>
+    <string name="add_a_restaurant_review">Add a restaurant review</string>
+    <string name="restaurant_brand_name">Restaurant/Brand name *</string>
+    <string name="restaurant_location">Restaurant location *</string>
+    <string name="clear_location">Clear Location</string>
+    <string name="tag_foodname_you_had">Tag #foodname you had *</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="type_your_review">Type your review... *</string>
+    <string name="upload_images">Upload Images</string>
+    <string name="cancel">Cancel</string>
+    <string name="post_review">Post Review</string>
+
+    <string name="review_added_success">Review posted successfully</string>
+    <string name="post_failed">Failed to post review</string>
+    <string name="upload_failed">Failed to upload image</string>
+    <string name="permission_denied">Permission denied, cannot access media images</string>
+    <string name="max_images_allowed">Maximum %1$d images allowed</string>
+
 </resources>

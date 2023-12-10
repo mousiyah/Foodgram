@@ -15,5 +15,6 @@
 
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

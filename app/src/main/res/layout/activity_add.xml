@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,23 +16,70 @@
     android:gravity="start"
     android:padding="30dp">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/loginTitleTextView"
-        android:text="Add a restaurant review"
+        android:text="@string/add_a_restaurant_review"
         android:textSize="24sp"
         android:textColor="@color/black"
         android:layout_gravity="start"
         android:layout_marginBottom="15dp"
         android:layout_marginStart="3dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/restaurantLocationTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/restaurant_location">
+
+            <AutoCompleteTextView
+                android:id="@+id/restaurantLocationAutoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dropDownHeight="wrap_content"
+                android:inputType="text|textCapSentences"
+                android:maxLines="1"
+                android:padding="16dp"
+                android:textSize="12sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/mapButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_map"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/clearLocationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_location"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="12sp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Restaurant/Brand name *"
+        android:hint="@string/restaurant_brand_name"
         android:id="@+id/restaurantNameTextField"
         android:layout_marginBottom="12sp">
 
@@ -43,41 +94,11 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/restaurantLocationTextField"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Restaurant location *">
-
-            <AutoCompleteTextView
-                android:id="@+id/restaurantLocationAutoComplete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:dropDownHeight="wrap_content"
-                android:inputType="text|textCapSentences"
-                android:maxLines="1"
-                android:padding="16dp"
-                android:textSize="12sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/clearLocationTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear Location"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="12sp"
-        android:layout_gravity="end"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
-
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tag #foodname you had *"
+        android:hint="@string/tag_foodname_you_had"
         android:id="@+id/foodNameTextField"
         android:layout_marginBottom="12sp">
 
@@ -97,7 +118,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rate your experience"
+        android:text="@string/rate_your_experience"
         android:textSize="16sp"
         android:textColor="@color/black"
         android:layout_gravity="start"
@@ -119,7 +140,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Type your review... *"
+        android:hint="@string/type_your_review"
         android:id="@+id/reviewContentTextField"
         android:layout_marginBottom="12sp">
 
@@ -130,7 +151,7 @@
             android:minLines="10"
             android:gravity="top"
             android:inputType="textMultiLine"
-            android:id="@+id/reviewContentEditText"/>
+            android:id="@+id/review_description_edit_text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -138,19 +159,16 @@
         style="@style/secondaryBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Upload Images"
+        android:text="@string/upload_images"
         android:layout_gravity="start"
         android:textAllCaps="false"
         android:layout_marginBottom="10dp" />
 
-    <GridView
-        android:id="@+id/uploadedImagesGridView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="3"
-        android:verticalSpacing="8dp"
-        android:horizontalSpacing="8dp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/uploadedImagesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -163,7 +181,7 @@
             android:id="@+id/cancelTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="?attr/colorPrimary"
             android:textSize="12sp"
             android:layout_marginEnd="20dp" />
@@ -172,7 +190,7 @@
             android:id="@+id/postButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Post Review"
+            android:text="@string/post_review"
             android:textAllCaps="false"
             android:textSize="12sp" />
     </LinearLayout>
@@ -180,3 +198,28 @@
 </LinearLayout>
 
 </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</FrameLayout>

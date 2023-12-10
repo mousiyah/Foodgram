@@ -6,6 +6,7 @@
         android:id="@+id/uploadedImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_margin="4dp"
         android:scaleType="centerCrop"
         android:src="@drawable/c1" />
 

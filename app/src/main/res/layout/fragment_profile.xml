@@ -48,9 +48,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/usernameTextView"
-                android:text=""
+                android:text="@string/username"
                 android:textSize="24sp"
                 android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/emailTextView"
+                android:text="@string/email"
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/signOutButton"
@@ -69,6 +76,10 @@
             android:layout_weight="8"
             android:orientation="vertical">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviewsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
         </LinearLayout>

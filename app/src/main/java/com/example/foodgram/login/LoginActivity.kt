@@ -1,4 +1,4 @@
-package com.example.foodgram
+package com.example.foodgram.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.example.foodgram.AuthManager
+import com.example.foodgram.BaseActivity
+import com.example.foodgram.MainActivity
+import com.example.foodgram.R
 import com.example.foodgram.databinding.ActivityLoginBinding
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
@@ -43,7 +46,16 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
+    override fun clearFocusFromAllForms() {
+        usernameTextField.clearFocus()
+        emailTextField.clearFocus()
+        passwordTextField.clearFocus()
+        passwordConfirmTextField.clearFocus()
+    }
+
     private fun initializeViews() {
+        setLoading(binding.loading)
+
         emailTextField = binding.emailTextField.editText!!
         passwordTextField = binding.passwordTextField.editText!!
         passwordConfirmTextField = binding.passwordConfirmTextField.editText!!
@@ -73,17 +85,23 @@ class LoginActivity : AppCompatActivity() {
     private fun onLoginButtonClicked() {
         val email = emailTextField.text.toString()
         val password = passwordTextField.text.toString()
-
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            AuthManager.signIn(email, password) { isSuccess ->
-                if (isSuccess) {
-                    onLoginSuccess()
-                } else {
-                    onLoginFailure()
-                }
-            }
+            login(email, password)
         } else {
             showEmptyFieldsError()
+        }
+    }
+
+    private fun login(email: String, password: String) {
+
+        loadingStart()
+
+        AuthManager.signIn(email, password) { isSuccess ->
+            if (isSuccess) {
+                onLoginSuccess()
+            } else {
+                onLoginFailure()
+            }
         }
     }
 
@@ -93,15 +111,10 @@ class LoginActivity : AppCompatActivity() {
         val passwordConfirm = passwordConfirmTextField.text.toString()
         val username = usernameTextField.text.toString()
 
-        if (email.isNotEmpty() && password.isNotEmpty() && password.isNotEmpty()) {
+        if (email.isNotEmpty() && username.isNotEmpty()
+            && password.isNotEmpty() && passwordConfirm.isNotEmpty()) {
             if (password == passwordConfirm) {
-                AuthManager.register(email, password, username) { isSuccess ->
-                    if (isSuccess) {
-                        onRegistrationSuccess()
-                    } else {
-                        onRegistrationFailure()
-                    }
-                }
+                register(email, password, username)
             } else {
                 showPasswordMismatch()
             }
@@ -110,7 +123,24 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun register(email: String,
+                         password: String,
+                         username: String) {
+
+        loadingStart()
+
+        AuthManager.register(email, password, username) { isSuccess ->
+            if (isSuccess) {
+                //login(email, password)
+                onRegistrationSuccess()
+            } else {
+                onRegistrationFailure()
+            }
+        }
+    }
+
     private fun onLoginSuccess() {
+        loadingEnd()
         navigateToMain()
     }
 
@@ -120,6 +150,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun onLoginFailure() {
+        loadingEnd()
         showToast(getString(R.string.wrong_credentials))
     }
 
@@ -132,11 +163,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun onRegistrationSuccess() {
+        loadingEnd()
         showToast(getString(R.string.registration_successful))
         navigateToMain()
     }
 
     private fun onRegistrationFailure() {
+        loadingEnd()
         showToast(getString(R.string.registration_failed))
     }
 
