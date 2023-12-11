@@ -2,20 +2,34 @@ package com.example.foodgram
 
 import android.content.Context
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
+import kotlinx.coroutines.tasks.await
 
-class MapsManager(applicationContext: Context) {
+class MapsManager() {
 
     private val mapsAPIkey = "AIzaSyD56CgJp9BOrChCvQh3h6l9-VJGX7hRqZk"
-    public lateinit var placesClient: PlacesClient
+    var placesClient: PlacesClient? = null
 
-    init {
-        initializePlacesAPI(applicationContext)
-    }
-
-    private fun initializePlacesAPI(applicationContext: Context) {
+    fun initializePlacesAPI(applicationContext: Context) {
         Places.initialize(applicationContext, mapsAPIkey)
         placesClient = Places.createClient(applicationContext)
+    }
+
+    fun getPlaceDetails(placeID: String, callback: (Place?) -> Unit) {
+        val placeFields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
+        val placeRequest = FetchPlaceRequest.newInstance(placeID, placeFields)
+
+        placesClient?.fetchPlace(placeRequest)?.addOnSuccessListener { response: FetchPlaceResponse ->
+            val place = response.place
+            callback(place)
+
+        }?.addOnFailureListener { exception: Exception ->
+            callback(null)
+            print(exception)
+        }
     }
 
 

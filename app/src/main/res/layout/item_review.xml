@@ -154,7 +154,8 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <ImageButton
                 android:id="@+id/moreButton"
@@ -175,30 +176,28 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <LinearLayout
+                    android:id="@+id/saveButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                 <ImageView
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
+                    android:id="@+id/saveImage"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_favorite_border" />
+                    android:src="@drawable/ic_favourite_border"
+                    android:tag="0"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
-                    android:text="254 likes"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_comment" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4 replies"
-                    android:textSize="11sp" />
+                    android:text="Save"
+                    android:textSize="12sp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

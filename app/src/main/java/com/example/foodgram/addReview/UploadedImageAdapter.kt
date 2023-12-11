@@ -46,6 +46,7 @@ class UploadedImageAdapter(private val context: Context, private val images: Mut
         }
     }
 
+
     override fun getItemCount(): Int = images.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

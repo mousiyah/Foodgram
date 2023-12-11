@@ -30,22 +30,36 @@ class MainActivity : BaseActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { controller, destination, _ ->
             when (destination.id) {
                 R.id.navigation_home -> {
-                    // Set the app bar layout for the HomeFragment
-                    setupAppBar(R.layout.app_bar_home)
+
+                    if (backstackExists()) {
+                        controller.popBackStack()
+                    }
+                    setupAppBar(R.layout.app_bar_base)
+
                 }
                 R.id.navigation_browse -> {
-                    // Set the app bar layout for the HomeFragment
+                    if (backstackExists()) {
+                        controller.popBackStack()
+                    }
                     supportActionBar?.hide()
                 }
                 R.id.navigation_profile -> {
-                    // Set the app bar layout for the ProfileFragment
-                    setupAppBar(R.layout.app_bar_home)
+                    if (backstackExists()) {
+                        controller.popBackStack()
+                    }
+                    setupAppBar(R.layout.app_bar_base)
+
                 }
             }
         }
+    }
+
+    private fun backstackExists(): Boolean {
+        val fragmentManager = supportFragmentManager
+        return fragmentManager.backStackEntryCount > 0
     }
 
 }

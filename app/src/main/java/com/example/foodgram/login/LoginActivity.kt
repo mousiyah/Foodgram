@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.example.foodgram.AuthManager
@@ -16,6 +18,10 @@ import com.example.foodgram.databinding.ActivityLoginBinding
 class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+
+    // Loading
+    private lateinit var overlay: View
+    private lateinit var progress: ProgressBar
 
     private lateinit var emailTextField: EditText
     private lateinit var passwordTextField: EditText
@@ -54,7 +60,8 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun initializeViews() {
-        setLoading(binding.loading)
+        overlay =  binding.overlay
+        progress = binding.progressBar
 
         emailTextField = binding.emailTextField.editText!!
         passwordTextField = binding.passwordTextField.editText!!
@@ -197,6 +204,16 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun showForgotPasswordDialog() {
-        // Implement forgot password functionality (e.g., show a dialog)
+        // TODO
+    }
+
+    private fun loadingStart() {
+        overlay.visibility = View.VISIBLE
+        progress.visibility = View.VISIBLE
+    }
+
+    private fun loadingEnd() {
+        overlay.visibility = View.GONE
+        progress.visibility = View.GONE
     }
 }

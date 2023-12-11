@@ -187,6 +187,15 @@
             android:layout_marginEnd="20dp" />
 
         <Button
+            android:id="@+id/updateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/update_review"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            android:visibility="gone"/>
+
+        <Button
             android:id="@+id/postButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -199,27 +208,20 @@
 
 </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/loading"
+
+    <View
+        android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:background="#80000000"
+        android:visibility="gone"/>
 
-        <View
-            android:id="@+id/overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#80000000"
-            android:visibility="gone" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-    </LinearLayout>
 
 </FrameLayout>

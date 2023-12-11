@@ -2,10 +2,12 @@ package com.example.foodgram.menu.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.RawContacts.Data
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -22,10 +24,13 @@ import com.example.foodgram.review.ReviewAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import java.util.EventListener
 
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
+
+    private var mapsManager: MapsManager? = null
 
     private lateinit var signInButton: Button
     private lateinit var signOutButton: Button
@@ -35,12 +40,22 @@ class ProfileFragment : Fragment() {
 
     private lateinit var reviewsRecyclerView: RecyclerView
 
+    private lateinit var myReviewsTab: LinearLayout
+    private lateinit var savedTab: LinearLayout
+
+    private var myReviewsEventListener: ValueEventListener? = null
+    private var savedReviewsEventListener: ValueEventListener? = null
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+        mapsManager = MapsManager()
+        mapsManager!!.initializePlacesAPI(requireContext())
 
         return binding.root
     }
@@ -54,8 +69,23 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        reviewsRecyclerView.adapter = null
+
+        myReviewsEventListener.let {
+            if (it != null) {
+                Database.myReviewsQuery.removeEventListener(it)
+            }
+        }
+        savedReviewsEventListener.let {
+            if (it != null) {
+                Database.savedReviews.removeEventListener(it)
+            }
+        }
+
+        mapsManager = null
         super.onDestroyView()
     }
+
 
     private fun initializeViews() {
         signInButton = binding.signInButton
@@ -65,11 +95,16 @@ class ProfileFragment : Fragment() {
         emailTextView = binding.emailTextView
 
         reviewsRecyclerView = binding.reviewsRecyclerView
+
+        myReviewsTab = binding.myReviewsTab
+        savedTab = binding.savedTab
     }
 
     private fun setupListeners() {
         signInButton.setOnClickListener { onSignInButtonClicked() }
         signOutButton.setOnClickListener { onSignOutButtonClicked() }
+        myReviewsTab.setOnClickListener( {switchToMyReviewsTab()} )
+        savedTab.setOnClickListener( {switchToSavedTab()} )
     }
 
     private fun onSignInButtonClicked() {
@@ -80,6 +115,14 @@ class ProfileFragment : Fragment() {
     private fun onSignOutButtonClicked() {
         AuthManager.signOut()
         updateUI()
+    }
+
+    private fun switchToMyReviewsTab() {
+        displayMyReviews()
+    }
+
+    private fun switchToSavedTab() {
+        displaySavedReviews()
     }
 
     private fun updateUI() {
@@ -100,7 +143,7 @@ class ProfileFragment : Fragment() {
         binding.profileLayout.visibility = View.VISIBLE
 
         displayGreeting()
-        displayReviews()
+        switchToMyReviewsTab()
     }
 
     private fun displayGreeting() {
@@ -111,12 +154,9 @@ class ProfileFragment : Fragment() {
         emailTextView.text = AuthManager.getCurrentUser()?.email
     }
 
-    private fun displayReviews() {
+    private fun displayMyReviews() {
 
-        // Query the database to fetch posts for the current user
-        val query = Database.reviews.orderByChild("username").equalTo(AuthManager.getUsername())
-
-        query.addValueEventListener(object : ValueEventListener {
+        myReviewsEventListener = Database.myReviewsQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val reviewList = mutableListOf<Review>()
 
@@ -125,13 +165,19 @@ class ProfileFragment : Fragment() {
                     review?.let { reviewList.add(it) }
                 }
 
-                // Set up adapter
-                var maps = MapsManager(requireContext())
-                val adapter = ReviewAdapter(reviewList,
-                                            requireContext(),
-                                            maps.placesClient)
-                reviewsRecyclerView.adapter = adapter
-                reviewsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                if (reviewList.isEmpty()){
+                    binding.noContent.visibility = View.VISIBLE
+                    reviewsRecyclerView.visibility = View.GONE
+                } else {
+                    binding.noContent.visibility = View.GONE
+                    reviewsRecyclerView.visibility = View.VISIBLE
+
+
+                    reviewList.sortByDescending { it.timestamp }
+
+                    updateRecycleView(reviewList)
+
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -142,6 +188,41 @@ class ProfileFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun displaySavedReviews() {
+        savedReviewsEventListener = Database.savedReviews.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val reviewList = mutableListOf<Review>()
+
+                for (reviewSnapshot in dataSnapshot.children) {
+                    val reviewID = reviewSnapshot.value as String
+
+                    Database.getReviewByID(reviewID) { review ->
+                        review?.let { reviewList.add(it) }
+
+                        reviewList.reverse()
+
+                        updateRecycleView(reviewList)
+
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(
+                    requireContext(),
+                    error.message,
+                    Toast.LENGTH_SHORT)
+            }
+        })
+    }
+
+    private fun updateRecycleView(reviewList: MutableList<Review>) {
+        val adapter = ReviewAdapter(reviewList,
+            requireContext(), mapsManager!!)
+        reviewsRecyclerView.adapter = adapter
+        reviewsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
 

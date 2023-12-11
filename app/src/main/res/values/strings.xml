@@ -40,5 +40,14 @@
     <string name="upload_failed">Failed to upload image</string>
     <string name="permission_denied">Permission denied, cannot access media images</string>
     <string name="max_images_allowed">Maximum %1$d images allowed</string>
+    <string name="update_review">Update Review</string>
+    <string name="edit_your_review">Edit your review</string>
+
+    <string name="delete_failed">Delete failed</string>
+    <string name="review_updated_success">Review updated successfully</string>
+    <string name="update_failed">Failed to update review</string>
+    <string name="no_reviews_to_show">No reviews to show</string>
+    <string name="saved">Saved</string>
+    <string name="my_reviews">My reviews</string>
 
 </resources>

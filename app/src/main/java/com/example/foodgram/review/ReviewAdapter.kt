@@ -1,26 +1,39 @@
 package com.example.foodgram.review
 
 import android.content.Context
+import android.content.Intent
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodgram.AuthManager
+import com.example.foodgram.Database
+import com.example.foodgram.MapsManager
 import com.example.foodgram.R
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
-import com.google.android.libraries.places.api.net.FetchPlaceResponse
-import com.google.android.libraries.places.api.net.PlacesClient
+import com.example.foodgram.addReview.AddActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 class ReviewAdapter(private val reviewList: List<Review>,
-                    private val context: Context,
-                    private val placesClient: PlacesClient) :
+                    private val context: Context, private val mapsManager: MapsManager
+) :
     RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>(){
+
+    val icFavSelected = ContextCompat.getDrawable(context, R.drawable.ic_favourite)
+    val icFavBorder = ContextCompat.getDrawable(context, R.drawable.ic_favourite_border)
 
     inner class ReviewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -34,10 +47,32 @@ class ReviewAdapter(private val reviewList: List<Review>,
         private val timestampTextView: TextView = itemView.findViewById(R.id.timestamp)
 
         private val moreButton: ImageButton = itemView.findViewById(R.id.moreButton)
+        private val saveButton: LinearLayout = itemView.findViewById(R.id.saveButton)
+        private val saveImage: ImageView = itemView.findViewById(R.id.saveImage)
 
+
+        @OptIn(DelicateCoroutinesApi::class)
         fun bind(review: Review) {
 
-            moreButton.setOnClickListener{ openMoreOptions(review.id, it) }
+            if (AuthManager.isGuestMode()) {
+                saveButton.visibility = View.GONE
+            } else {
+
+                if (review.username == AuthManager.getUsername()) {
+                    moreButton.visibility = View.VISIBLE
+                    moreButton.setOnClickListener { openMoreOptions(review.id, it, context) }
+
+                    saveButton.visibility = View.GONE
+                } else {
+                    moreButton.visibility = View.GONE
+                    saveButton.visibility = View.VISIBLE
+
+                    saveButton.visibility = View.VISIBLE
+                    setSaveButtonImage(review.id, saveImage)
+                    saveButton.setOnClickListener{ saveReview(review.id, saveImage)}
+                }
+
+            }
 
             usernameTextView.text = review.username
             restaurantNameTextView.text = review.restaurantName
@@ -45,14 +80,11 @@ class ReviewAdapter(private val reviewList: List<Review>,
             descriptionTextView.text = review.description
             ratingBar.rating = review.rating
 
-            //Location
-            val request = FetchPlaceRequest.newInstance(review.placeID, listOf(Place.Field.ADDRESS))
-
-            placesClient.fetchPlace(request).addOnSuccessListener { response: FetchPlaceResponse ->
-                val place = response.place
-                locationTextView.text = place.address
-            }.addOnFailureListener { exception: Exception ->
-                print(exception)
+            // Location
+            mapsManager.getPlaceDetails(review.placeID) { place ->
+                place?.let {
+                    locationTextView.text = it.address
+                }
             }
 
             // Images
@@ -75,13 +107,13 @@ class ReviewAdapter(private val reviewList: List<Review>,
             }
         }
 
-    fun openMoreOptions(reviewID: String?, view: View) {
+    fun openMoreOptions(reviewID: String?, view: View, context: Context) {
         val popupMenu = PopupMenu(context, view)
         popupMenu.menuInflater.inflate(R.menu.review_options_menu, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.edit_review -> {
-                    editReview(reviewID)
+                    editReview(reviewID, context)
                     true
                 }
                 R.id.delete_review -> {
@@ -94,13 +126,57 @@ class ReviewAdapter(private val reviewList: List<Review>,
         popupMenu.show()
     }
 
-    private fun editReview(reviewID: String?) {
+    fun saveReview(reviewID: String?, saveImage: ImageView) {
 
+        if (saveImage.tag == true) {
+
+            saveImage.setImageDrawable(icFavBorder)
+            saveImage.tag = false
+
+            Database.unSaveReview(reviewID!!)
+
+        } else {
+
+            saveImage.setImageDrawable(icFavSelected)
+            saveImage.tag = true
+
+            Database.saveReview(reviewID!!)
+
+        }
+    }
+
+    private fun editReview(reviewID: String?, context: Context) {
+        val intent = Intent(context, AddActivity::class.java)
+        intent.putExtra("reviewID", reviewID)
+        startActivity(context, intent, null)
     }
 
     private fun deleteReview(reviewID: String?) {
-
+        Database.deleteReview(reviewID!!,
+            { notifyDataSetChanged() },
+            { Toast.makeText(context, context.getString(R.string.delete_failed), Toast.LENGTH_SHORT).show()})
     }
+
+    private fun setSaveButtonImage(id: String?, saveImage: ImageView) {
+        Database.savedReviews.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val isSaved = dataSnapshot.children.any { it.getValue(String::class.java) == id }
+                if (isSaved) {
+                    saveImage.setImageDrawable(icFavSelected)
+                    saveImage.tag = true
+                } else {
+                    saveImage.setImageDrawable(icFavBorder)
+                    saveImage.tag = false
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                print(error)
+            }
+        })
+    }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val view = LayoutInflater.from(parent.context)

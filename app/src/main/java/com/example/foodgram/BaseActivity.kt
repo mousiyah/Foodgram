@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private lateinit var loading: LinearLayout
-
     protected val mediaAccessPermissionCode = 102
     protected val mapSelectionRequestCode = 103
 
@@ -35,19 +33,6 @@ abstract class BaseActivity : AppCompatActivity() {
             hideKeyboard()
         }
         return super.dispatchTouchEvent(ev)
-    }
-
-    // Loading
-    fun setLoading(loadingItem: LinearLayout) {
-        loading = loadingItem
-    }
-
-    fun loadingStart() {
-        loading.visibility = View.VISIBLE
-    }
-
-    fun loadingEnd() {
-        loading.visibility = View.GONE
     }
 
 }
