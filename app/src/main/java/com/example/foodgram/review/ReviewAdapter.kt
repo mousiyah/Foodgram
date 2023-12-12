@@ -158,7 +158,7 @@ class ReviewAdapter(private val reviewList: List<Review>,
     }
 
     private fun setSaveButtonImage(id: String?, saveImage: ImageView) {
-        Database.savedReviews.addListenerForSingleValueEvent(object : ValueEventListener {
+        Database.savedReviews?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val isSaved = dataSnapshot.children.any { it.getValue(String::class.java) == id }
                 if (isSaved) {

@@ -23,7 +23,18 @@ object Database {
     var reviews: DatabaseReference = database.reference.child("reviews")
 
     val myReviewsQuery = reviews.orderByChild("username").equalTo(AuthManager.getUsername())
-    val savedReviews: DatabaseReference = users.child(AuthManager.getUsername()!!).child("saved")
+
+    var savedReviews: DatabaseReference? = null
+
+    fun setUpDatabase() {
+        savedReviews = AuthManager.getUsername()?.let { username ->
+            if (!AuthManager.isGuestMode()) {
+                users.child(username).child("saved")
+            } else {
+                null
+            }
+        }
+    }
 
     fun getReviewByID(id: String, callback: (Review?) -> Unit) {
         reviews.child(id).get().addOnSuccessListener { snapshot ->
@@ -130,20 +141,22 @@ object Database {
     }
 
     fun unSaveReview(id: String) {
-        val query = savedReviews.orderByValue().equalTo(id)
+        val query = savedReviews?.orderByValue()?.equalTo(id)
 
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (childSnapshot in snapshot.children) {
-                    childSnapshot.ref.removeValue()
+        if (query != null) {
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (childSnapshot in snapshot.children) {
+                        childSnapshot.ref.removeValue()
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                print(error)
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    print(error)
+                }
 
-        })
+            })
+        }
     }
 
 }

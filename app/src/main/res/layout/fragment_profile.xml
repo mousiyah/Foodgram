@@ -118,7 +118,7 @@
         <View
             android:id="@+id/myReviewsLine"
             android:layout_width="40dp"
-            android:layout_height="1dp"
+            android:layout_height="3dp"
             android:layout_gravity="center_horizontal"
             android:background="@android:color/holo_purple" />
 
@@ -143,7 +143,7 @@
                 <View
                     android:id="@+id/savedLine"
                     android:layout_width="40dp"
-                    android:layout_height="1dp"
+                    android:layout_height="3dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@android:color/darker_gray" />
 

@@ -44,6 +44,7 @@ class HomeFragment : Fragment() {
         mapsManager = MapsManager()
         mapsManager!!.initializePlacesAPI(requireContext())
 
+        Database.setUpDatabase()
         initializeViews()
         setupListeners()
         setAdapters()

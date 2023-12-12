@@ -69,21 +69,26 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        removeListeners()
         reviewsRecyclerView.adapter = null
+        mapsManager = null
+        super.onDestroyView()
+    }
+
+    private fun removeListeners() {
 
         myReviewsEventListener.let {
             if (it != null) {
                 Database.myReviewsQuery.removeEventListener(it)
             }
         }
+        myReviewsEventListener = null
         savedReviewsEventListener.let {
             if (it != null) {
-                Database.savedReviews.removeEventListener(it)
+                Database.savedReviews?.removeEventListener(it)
             }
         }
-
-        mapsManager = null
-        super.onDestroyView()
+        savedReviewsEventListener = null
     }
 
 
@@ -118,10 +123,14 @@ class ProfileFragment : Fragment() {
     }
 
     private fun switchToMyReviewsTab() {
+        binding.myReviewsLine.setBackgroundColor(resources.getColor(R.color.purple, requireContext().theme))
+        binding.savedLine.setBackgroundColor(resources.getColor(R.color.dark_grey, requireContext().theme))
         displayMyReviews()
     }
 
     private fun switchToSavedTab() {
+        binding.savedLine.setBackgroundColor(resources.getColor(R.color.purple, requireContext().theme))
+        binding.myReviewsLine.setBackgroundColor(resources.getColor(R.color.dark_grey, requireContext().theme))
         displaySavedReviews()
     }
 
@@ -174,7 +183,6 @@ class ProfileFragment : Fragment() {
 
 
                     reviewList.sortByDescending { it.timestamp }
-
                     updateRecycleView(reviewList)
 
                 }
@@ -191,22 +199,21 @@ class ProfileFragment : Fragment() {
     }
 
     private fun displaySavedReviews() {
-        savedReviewsEventListener = Database.savedReviews.addValueEventListener(object : ValueEventListener {
+        Database.savedReviews!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val reviewList = mutableListOf<Review>()
+                val savedReviewList = mutableListOf<Review>()
 
                 for (reviewSnapshot in dataSnapshot.children) {
                     val reviewID = reviewSnapshot.value as String
 
                     Database.getReviewByID(reviewID) { review ->
-                        review?.let { reviewList.add(it) }
-
-                        reviewList.reverse()
-
-                        updateRecycleView(reviewList)
+                        review?.let { savedReviewList.add(it) }
 
                     }
                 }
+
+                savedReviewList.reverse()
+                updateRecycleView(savedReviewList)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -217,6 +224,7 @@ class ProfileFragment : Fragment() {
             }
         })
     }
+
 
     private fun updateRecycleView(reviewList: MutableList<Review>) {
         val adapter = ReviewAdapter(reviewList,

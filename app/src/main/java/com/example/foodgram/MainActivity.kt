@@ -17,6 +17,7 @@ class MainActivity : BaseActivity() {
 
         setupBinding()
         setupNavigation()
+        Database.setUpDatabase()
     }
 
     private fun setupBinding() {
