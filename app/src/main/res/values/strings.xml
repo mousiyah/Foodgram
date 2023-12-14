@@ -28,7 +28,7 @@
     <string name="restaurant_brand_name">Restaurant/Brand name *</string>
     <string name="restaurant_location">Restaurant location *</string>
     <string name="clear_location">Clear Location</string>
-    <string name="tag_foodname_you_had">Tag #foodname you had *</string>
+    <string name="enter_type_of_food">What type of food did you eat? *</string>
     <string name="rate_your_experience">Rate your experience</string>
     <string name="type_your_review">Type your review... *</string>
     <string name="upload_images">Upload Images</string>
@@ -54,7 +54,8 @@
     <string name="save">Save</string>
     <string name="speech_to_text">Speech To Text</string>
     <string name="search_bar">Search Bar</string>
-    <string name="search_by_restaurant_food_name">Search by restaurant, food name</string>
+    <string name="search_by_restaurant_food_name">Search by restaurant, cafe names</string>
     <string name="add_review">Add review</string>
+    <string name="search_by_category">Search by food category</string>
 
 </resources>

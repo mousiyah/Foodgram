@@ -95,25 +95,40 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/tag_foodname_you_had"
-        android:id="@+id/foodNameTextField"
-        android:layout_marginBottom="12sp">
+        android:layout_marginBottom="10dp">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/foodNameTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:maxLines="1"
-            android:inputType="text|textCapSentences"
-            android:padding="16dp"
-            android:dropDownHeight="wrap_content"
-            android:id="@+id/foodNameEditText"/>
+            android:hint="@string/enter_type_of_food">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <AutoCompleteTextView
+                android:id="@+id/foodNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:inputType="text|textCapSentences"
+                android:maxLines="1"
+                android:textSize="12sp"
+                android:dropDownHeight="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/options_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:src="@drawable/ic_dropdown"
+            android:backgroundTint="@color/white"
+            android:layout_marginEnd="0dp"/>
+
+    </FrameLayout>
 
 
     <TextView

@@ -1,13 +1,18 @@
 package com.example.foodgram.addReview
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -51,7 +56,7 @@ class AddActivity : BaseActivity() {
     private lateinit var loginTitleTextView: TextView
     private lateinit var restaurantLocationAutoComplete: TextView
     private lateinit var restaurantNameTextField: EditText
-    private lateinit var foodNameTextField: EditText
+    private lateinit var foodCategoryTextField: TextView
     private lateinit var descriptionTextField: EditText
     private lateinit var ratingBar: RatingBar
 
@@ -124,7 +129,7 @@ class AddActivity : BaseActivity() {
     private fun updateFields() {
         Database.getReviewByID(reviewIDtoUpdate) {review ->
             restaurantNameTextField.setText(review!!.restaurantName)
-            foodNameTextField.setText(review.foodName)
+            foodCategoryTextField.setText(review.foodName)
             descriptionTextField.setText(review.description)
             ratingBar.rating = review.rating
 
@@ -208,7 +213,7 @@ class AddActivity : BaseActivity() {
 
     private fun makeReviewFromInput(uploadedImageUrls: List<String>):Review {
         val restaurantName = restaurantNameTextField.text.toString()
-        val foodName = foodNameTextField.text.toString()
+        val foodCategory = foodCategoryTextField.text.toString()
         val description = descriptionTextField.text.toString()
         val rating = ratingBar.rating.toString().toFloat()
         val location = place.id
@@ -220,7 +225,7 @@ class AddActivity : BaseActivity() {
             id,
             username,
             restaurantName,
-            foodName,
+            foodCategory,
             description,
             rating,
             location,
@@ -255,7 +260,7 @@ class AddActivity : BaseActivity() {
 
     private fun clearFields() {
         restaurantNameTextField.setText("")
-        foodNameTextField.setText("")
+        foodCategoryTextField.setText("")
         descriptionTextField.setText("")
         ratingBar.rating = 0.0f
         restaurantLocationAutoComplete.text = ""
@@ -304,11 +309,11 @@ class AddActivity : BaseActivity() {
 
         loginTitleTextView = binding.loginTitleTextView
         restaurantNameTextField = binding.restaurantNameEditText
-        foodNameTextField = binding.foodNameEditText
+        foodCategoryTextField = binding.foodNameEditText
+        createPopupMenu()
+
         descriptionTextField = binding.reviewDescriptionEditText
-
         restaurantLocationAutoComplete = binding.restaurantLocationAutoComplete
-
         ratingBar = binding.ratingBar
 
         imageSelector = ImageSelector(this, maxImages)
@@ -334,6 +339,37 @@ class AddActivity : BaseActivity() {
         }
         restaurantLocationAutoComplete.setOnClickListener { startLocationAutocomplete() }
     }
+
+    private fun createPopupMenu() {
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            arrayOf("Fast Food", "Breakfast and Brunch", "Coffee and Tea", "Pizza", "Dessert", "Indian", "Noodle", "Vegan")
+        )
+        val autoCompleteTextView = binding.foodNameEditText as AutoCompleteTextView
+        autoCompleteTextView.setAdapter(adapter)
+
+        val optionsButton = binding.optionsButton
+        val popupMenu = PopupMenu(this, optionsButton)
+
+        for (i in 0 until adapter.count) {
+            popupMenu.menu.add(adapter.getItem(i).toString())
+        }
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            autoCompleteTextView.setText(menuItem.title)
+            true
+        }
+
+        popupMenu.setOnDismissListener {
+            popupMenu.dismiss()
+        }
+
+        optionsButton.setOnClickListener {
+            popupMenu.show()
+        }
+    }
+
 
     private fun hasMediaImagesPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -430,7 +466,7 @@ class AddActivity : BaseActivity() {
 
     override fun clearFocusFromAllForms() {
         restaurantNameTextField.clearFocus()
-        foodNameTextField.clearFocus()
+        foodCategoryTextField.clearFocus()
         descriptionTextField.clearFocus()
         restaurantLocationAutoComplete.clearFocus()
     }
