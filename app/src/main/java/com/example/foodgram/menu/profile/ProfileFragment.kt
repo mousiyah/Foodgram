@@ -1,8 +1,8 @@
 package com.example.foodgram.menu.profile
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.RawContacts.Data
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +24,6 @@ import com.example.foodgram.review.ReviewAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import java.util.EventListener
 
 class ProfileFragment : Fragment() {
 
@@ -46,6 +45,8 @@ class ProfileFragment : Fragment() {
     private var myReviewsEventListener: ValueEventListener? = null
     private var savedReviewsEventListener: ValueEventListener? = null
 
+    private var selectedTabId: Int = R.id.myReviewsTab
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,9 +64,21 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (savedInstanceState != null) {
+            selectedTabId = savedInstanceState.getInt("selectedTabId")
+            restoreSelectedTab()
+        } else {
+            switchToMyReviewsTab()
+        }
+
         initializeViews()
         setupListeners()
         updateUI()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt("selectedTabId", selectedTabId)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroyView() {
@@ -73,6 +86,13 @@ class ProfileFragment : Fragment() {
         reviewsRecyclerView.adapter = null
         mapsManager = null
         super.onDestroyView()
+    }
+
+    private fun restoreSelectedTab() {
+        when (selectedTabId) {
+            R.id.myReviewsTab -> switchToMyReviewsTab()
+            R.id.savedTab -> switchToSavedTab()
+        }
     }
 
     private fun removeListeners() {
@@ -85,7 +105,7 @@ class ProfileFragment : Fragment() {
         myReviewsEventListener = null
         savedReviewsEventListener.let {
             if (it != null) {
-                Database.savedReviews?.removeEventListener(it)
+                Database.savedReviews!!.removeEventListener(it)
             }
         }
         savedReviewsEventListener = null
@@ -108,11 +128,17 @@ class ProfileFragment : Fragment() {
     private fun setupListeners() {
         signInButton.setOnClickListener { onSignInButtonClicked() }
         signOutButton.setOnClickListener { onSignOutButtonClicked() }
-        myReviewsTab.setOnClickListener( {switchToMyReviewsTab()} )
-        savedTab.setOnClickListener( {switchToSavedTab()} )
+        myReviewsTab.setOnClickListener({ switchToMyReviewsTab() })
+        savedTab.setOnClickListener({ switchToSavedTab() })
     }
 
     private fun onSignInButtonClicked() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isGuestModeOn", false)
+        editor.apply()
+
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
     }
@@ -123,21 +149,45 @@ class ProfileFragment : Fragment() {
     }
 
     private fun switchToMyReviewsTab() {
-        binding.myReviewsLine.setBackgroundColor(resources.getColor(R.color.purple, requireContext().theme))
-        binding.savedLine.setBackgroundColor(resources.getColor(R.color.dark_grey, requireContext().theme))
+        binding.myReviewsLine.setBackgroundColor(
+            resources.getColor(
+                R.color.purple,
+                requireContext().theme
+            )
+        )
+        binding.savedLine.setBackgroundColor(
+            resources.getColor(
+                R.color.white,
+                requireContext().theme
+            )
+        )
         displayMyReviews()
+
+        selectedTabId = R.id.myReviewsTab
     }
 
     private fun switchToSavedTab() {
-        binding.savedLine.setBackgroundColor(resources.getColor(R.color.purple, requireContext().theme))
-        binding.myReviewsLine.setBackgroundColor(resources.getColor(R.color.dark_grey, requireContext().theme))
+        binding.savedLine.setBackgroundColor(
+            resources.getColor(
+                R.color.purple,
+                requireContext().theme
+            )
+        )
+        binding.myReviewsLine.setBackgroundColor(
+            resources.getColor(
+                R.color.white,
+                requireContext().theme
+            )
+        )
         displaySavedReviews()
+
+        selectedTabId = R.id.savedTab
     }
 
     private fun updateUI() {
-        if (AuthManager.isGuestMode()){
+        if (AuthManager.isGuestMode()) {
             switchToGuestMode()
-        } else{
+        } else {
             switchToProfileMode()
         }
     }
@@ -152,7 +202,6 @@ class ProfileFragment : Fragment() {
         binding.profileLayout.visibility = View.VISIBLE
 
         displayGreeting()
-        switchToMyReviewsTab()
     }
 
     private fun displayGreeting() {
@@ -164,67 +213,101 @@ class ProfileFragment : Fragment() {
     }
 
     private fun displayMyReviews() {
+        myReviewsEventListener =
+            Database.myReviewsQuery.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (isAdded) {
+                        val reviewList = mutableListOf<Review>()
+                        var hasContent = false
 
-        myReviewsEventListener = Database.myReviewsQuery.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val reviewList = mutableListOf<Review>()
+                        for (reviewSnapshot in dataSnapshot.children) {
+                            val review = reviewSnapshot.getValue(Review::class.java)
+                            review?.let { reviewList.add(it) }
+                        }
 
-                for (reviewSnapshot in dataSnapshot.children) {
-                    val review = reviewSnapshot.getValue(Review::class.java)
-                    review?.let { reviewList.add(it) }
-                }
+                        if (reviewList.isNotEmpty()) {
+                            hasContent = true
+                            reviewList.sortByDescending { it.timestamp }
+                            updateRecycleView(reviewList)
+                        }
 
-                if (reviewList.isEmpty()){
-                    binding.noContent.visibility = View.VISIBLE
-                    reviewsRecyclerView.visibility = View.GONE
-                } else {
-                    binding.noContent.visibility = View.GONE
-                    reviewsRecyclerView.visibility = View.VISIBLE
-
-
-                    reviewList.sortByDescending { it.timestamp }
-                    updateRecycleView(reviewList)
-
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(
-                    requireContext(),
-                    error.message,
-                    Toast.LENGTH_SHORT)
-            }
-
-        })
-    }
-
-    private fun displaySavedReviews() {
-        Database.savedReviews!!.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val savedReviewList = mutableListOf<Review>()
-
-                for (reviewSnapshot in dataSnapshot.children) {
-                    val reviewID = reviewSnapshot.value as String
-
-                    Database.getReviewByID(reviewID) { review ->
-                        review?.let { savedReviewList.add(it) }
-
+                        if (hasContent) {
+                            showContent()
+                        } else {
+                            noContent()
+                        }
                     }
                 }
 
-                savedReviewList.reverse()
-                updateRecycleView(savedReviewList)
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        requireContext(),
+                        error.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+    }
+
+
+    private fun displaySavedReviews() {
+        Database.savedReviews!!.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (isAdded) {
+                    val savedReviewIDs = mutableListOf<String>()
+
+                    for (reviewSnapshot in dataSnapshot.children) {
+                        val reviewID = reviewSnapshot.value as String
+                        savedReviewIDs.add(reviewID)
+                    }
+
+                    val savedReviewList = mutableListOf<Review>()
+                    val totalReviews = savedReviewIDs.size
+                    var reviewsProcessed = 0
+
+                    if (totalReviews == 0) {
+                        noContent()
+                    } else {
+                        savedReviewIDs.forEach { reviewID ->
+                            Database.getReviewByID(reviewID) { review ->
+                                review?.let { savedReviewList.add(it) }
+
+                                reviewsProcessed++
+                                if (reviewsProcessed == totalReviews) {
+                                    if (savedReviewList.isEmpty()) {
+                                        noContent()
+                                    } else {
+                                        showContent()
+
+                                        savedReviewList.sortByDescending { it.timestamp }
+                                        updateRecycleView(savedReviewList)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(
                     requireContext(),
                     error.message,
-                    Toast.LENGTH_SHORT)
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
 
+    private fun noContent() {
+        binding.noContent.visibility = View.VISIBLE
+        reviewsRecyclerView.visibility = View.GONE
+    }
+
+    private fun showContent() {
+        binding.noContent.visibility = View.GONE
+        reviewsRecyclerView.visibility = View.VISIBLE
+    }
 
     private fun updateRecycleView(reviewList: MutableList<Review>) {
         val adapter = ReviewAdapter(reviewList,

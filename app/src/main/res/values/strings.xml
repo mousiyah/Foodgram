@@ -49,5 +49,12 @@
     <string name="no_reviews_to_show">No reviews to show</string>
     <string name="saved">Saved</string>
     <string name="my_reviews">My reviews</string>
+    <string name="edit_review">Edit Review</string>
+    <string name="delete_review">Delete Review</string>
+    <string name="save">Save</string>
+    <string name="speech_to_text">Speech To Text</string>
+    <string name="search_bar">Search Bar</string>
+    <string name="search_by_restaurant_food_name">Search by restaurant, food name</string>
+    <string name="add_review">Add review</string>
 
 </resources>

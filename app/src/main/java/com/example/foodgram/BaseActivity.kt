@@ -12,6 +12,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected val mediaAccessPermissionCode = 102
     protected val mapSelectionRequestCode = 103
 
+
     fun setupAppBar(appBarID: Int) {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(appBarID)

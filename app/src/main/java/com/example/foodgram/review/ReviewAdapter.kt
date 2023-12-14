@@ -32,11 +32,13 @@ class ReviewAdapter(private val reviewList: List<Review>,
 ) :
     RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>(){
 
+    // 'Favourite' icon drawables
     val icFavSelected = ContextCompat.getDrawable(context, R.drawable.ic_favourite)
     val icFavBorder = ContextCompat.getDrawable(context, R.drawable.ic_favourite_border)
 
     inner class ReviewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        // Views
         private val usernameTextView: TextView = itemView.findViewById(R.id.username)
         private val restaurantNameTextView: TextView = itemView.findViewById(R.id.restaurantName)
         private val foodNameTextView: TextView = itemView.findViewById(R.id.foodName)
@@ -46,6 +48,7 @@ class ReviewAdapter(private val reviewList: List<Review>,
         private val imageRecyclerView: RecyclerView = itemView.findViewById(R.id.images)
         private val timestampTextView: TextView = itemView.findViewById(R.id.timestamp)
 
+        // Clickable
         private val moreButton: ImageButton = itemView.findViewById(R.id.moreButton)
         private val saveButton: LinearLayout = itemView.findViewById(R.id.saveButton)
         private val saveImage: ImageView = itemView.findViewById(R.id.saveImage)
@@ -53,27 +56,44 @@ class ReviewAdapter(private val reviewList: List<Review>,
 
         @OptIn(DelicateCoroutinesApi::class)
         fun bind(review: Review) {
+            setUpUI(review)
+        }
 
+        private fun setUpUI(review: Review) {
+            setUpInteraction(review)
+            setUpViews(review)
+        }
+
+        private fun setUpInteraction(review: Review) {
             if (AuthManager.isGuestMode()) {
                 saveButton.visibility = View.GONE
+                moreButton.visibility = View.GONE
             } else {
 
+
                 if (review.username == AuthManager.getUsername()) {
+
                     moreButton.visibility = View.VISIBLE
+                    saveButton.visibility = View.GONE
+
                     moreButton.setOnClickListener { openMoreOptions(review.id, it, context) }
 
-                    saveButton.visibility = View.GONE
                 } else {
+
                     moreButton.visibility = View.GONE
                     saveButton.visibility = View.VISIBLE
 
-                    saveButton.visibility = View.VISIBLE
                     setSaveButtonImage(review.id, saveImage)
                     saveButton.setOnClickListener{ saveReview(review.id, saveImage)}
+
                 }
-
             }
+        }
 
+
+        private fun setUpViews(review: Review) {
+
+            // General fields
             usernameTextView.text = review.username
             restaurantNameTextView.text = review.restaurantName
             foodNameTextView.text = review.foodName
@@ -93,19 +113,25 @@ class ReviewAdapter(private val reviewList: List<Review>,
             val imageAdapter = ReviewImageAdapter(review.imageUrls)
             imageRecyclerView.adapter = imageAdapter
 
-            // Time
-            val reviewTime = review.timestamp
+            timestampTextView.text = getRelativeTime(review.timestamp)
+
+        }
+
+        private fun getRelativeTime(timestamp: Long): String {
             val currentTime = System.currentTimeMillis()
 
             val relativeTime = DateUtils.getRelativeTimeSpanString(
-                reviewTime,
+                timestamp,
                 currentTime,
                 DateUtils.MINUTE_IN_MILLIS
             )
-                timestampTextView.text = relativeTime.toString()
 
-            }
+            return relativeTime.toString()
         }
+
+
+    }
+
 
     fun openMoreOptions(reviewID: String?, view: View, context: Context) {
         val popupMenu = PopupMenu(context, view)

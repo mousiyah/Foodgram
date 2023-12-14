@@ -8,11 +8,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -20,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.foodgram.AuthManager
 import com.example.foodgram.BaseActivity
 import com.example.foodgram.Database
@@ -32,8 +30,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class AddActivity : BaseActivity() {
@@ -43,16 +40,12 @@ class AddActivity : BaseActivity() {
     private var isUpdateMode: Boolean = false
     private var reviewIDtoUpdate: String = ""
 
-    // Loading
-    private lateinit var overlay: View
-    private lateinit var progress: ProgressBar
-
     // Views
     private lateinit var cancelButton: TextView
     private lateinit var postButton: Button
     private lateinit var clearLocationButton: TextView
     private lateinit var uploadImagesButton: Button
-    private lateinit var mapButton: ImageButton
+    private lateinit var mapButton: LottieAnimationView
     private lateinit var updateButton: Button
 
     private lateinit var loginTitleTextView: TextView
@@ -177,7 +170,7 @@ class AddActivity : BaseActivity() {
     }
 
     private fun onUpdateReviewSuccess() {
-        Toast.makeText(this@AddActivity, getString(R.string.review_updated_success), Toast.LENGTH_SHORT).show()
+        showSnackbar(getString(R.string.review_updated_success))
         clearFields()
         loadingEnd()
 
@@ -185,7 +178,7 @@ class AddActivity : BaseActivity() {
     }
 
     private fun onUpdateReviewFail() {
-        Toast.makeText(this@AddActivity, getString(R.string.update_failed), Toast.LENGTH_SHORT).show()
+        showSnackbar(getString(R.string.update_failed))
         loadingEnd()
     }
 
@@ -236,7 +229,7 @@ class AddActivity : BaseActivity() {
     }
 
     private fun onPostReviewSuccess() {
-        Toast.makeText(this@AddActivity, getString(R.string.review_added_success), Toast.LENGTH_SHORT).show()
+        showSnackbar(getString(R.string.review_added_success))
         clearFields()
         loadingEnd()
 
@@ -250,16 +243,12 @@ class AddActivity : BaseActivity() {
     }
 
     private fun onPostReviewFail() {
-        Toast.makeText(this@AddActivity, getString(R.string.post_failed), Toast.LENGTH_SHORT).show()
+        showSnackbar(getString(R.string.post_failed))
         loadingEnd()
     }
 
     private fun onUploadImagesFail() {
-        Toast.makeText(
-            this@AddActivity,
-            getString(R.string.upload_failed),
-            Toast.LENGTH_SHORT
-        ).show()
+        showSnackbar(getString(R.string.upload_failed))
         loadingEnd()
     }
 
@@ -305,9 +294,6 @@ class AddActivity : BaseActivity() {
     }
 
     private fun initViews() {
-        overlay =  binding.overlay
-        progress = binding.progressBar
-
         cancelButton = binding.cancelTextView
         postButton = binding.postButton
 
@@ -374,11 +360,7 @@ class AddActivity : BaseActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 uploadImages()
             } else {
-                Toast.makeText(
-                    this,
-                    getString(R.string.permission_denied),
-                    Toast.LENGTH_SHORT
-                ).show()
+                showSnackbar(getString(R.string.permission_denied))
             }
         }
     }
@@ -434,13 +416,15 @@ class AddActivity : BaseActivity() {
             selectedImages.addAll(newSelectedImages)
             imageAdapter.notifyDataSetChanged()
         } else {
-            Toast.makeText(this,
-                getString(R.string.max_images_allowed, maxImages),
-                Toast.LENGTH_SHORT).show()
+            showSnackbar(getString(R.string.max_images_allowed, maxImages))
         }
 
         imageSelector = ImageSelector(this, maxImages)
         hideKeyboard()
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(updateButton, message, Snackbar.LENGTH_SHORT).show()
     }
 
 
@@ -452,13 +436,13 @@ class AddActivity : BaseActivity() {
     }
 
     private fun loadingStart() {
-        overlay.visibility = View.VISIBLE
-        progress.visibility = View.VISIBLE
+        binding.overlay.visibility = View.VISIBLE
+        binding.loading.visibility = View.VISIBLE
     }
 
     private fun loadingEnd() {
-        overlay.visibility = View.GONE
-        progress.visibility = View.GONE
+        binding.overlay.visibility = View.GONE
+        binding.loading.visibility = View.GONE
     }
 
 }

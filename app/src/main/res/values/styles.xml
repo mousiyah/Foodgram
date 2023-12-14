@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="AppBarTitle">
         <item name="android:textSize">30sp</item>
         <item name="android:fontFamily">@font/title</item>
@@ -15,4 +16,6 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
 </resources>
+

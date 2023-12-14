@@ -1,12 +1,14 @@
 package com.example.foodgram
 
 import android.content.Context
+import android.content.res.Resources.getSystem
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
-import kotlinx.coroutines.tasks.await
+import com.example.foodgram.R
+
 
 class MapsManager() {
 

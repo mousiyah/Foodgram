@@ -1,11 +1,11 @@
 package com.example.foodgram.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -14,6 +14,7 @@ import com.example.foodgram.BaseActivity
 import com.example.foodgram.MainActivity
 import com.example.foodgram.R
 import com.example.foodgram.databinding.ActivityLoginBinding
+import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : BaseActivity() {
 
@@ -41,6 +42,9 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        isLoggedIn()
+        isGuestModeOn()
 
         initializeViews()
         setupListeners()
@@ -81,12 +85,34 @@ class LoginActivity : BaseActivity() {
     private fun setupListeners() {
         loginButton.setOnClickListener { onLoginButtonClicked() }
         registerButton.setOnClickListener { onRegisterButtonClicked() }
-        guestButton.setOnClickListener{ navigateToMain() }
+        guestButton.setOnClickListener{ onGuestModeClicked() }
 
         registerSwitch.setOnClickListener { navigateToRegistration() }
         loginSwitch.setOnClickListener { navigateToLogin() }
 
         forgotPasswordButton.setOnClickListener { showForgotPasswordDialog() }
+    }
+
+    private fun isLoggedIn(){
+        if (AuthManager.getCurrentUser() != null){
+            navigateToMain()
+        }
+    }
+
+    private fun onGuestModeClicked() {
+        val sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isGuestModeOn", true)
+        editor.apply()
+
+        navigateToMain()
+    }
+
+    private fun isGuestModeOn() {
+        val sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        if(sharedPreferences.getBoolean("isGuestModeOn", false)) {
+            navigateToMain()
+        }
     }
 
     private fun onLoginButtonClicked() {
@@ -158,31 +184,31 @@ class LoginActivity : BaseActivity() {
 
     private fun onLoginFailure() {
         loadingEnd()
-        showToast(getString(R.string.wrong_credentials))
+        showSnackbar(getString(R.string.wrong_credentials))
     }
 
     private fun showEmptyFieldsError() {
-        showToast(getString(R.string.empty_fields_error))
+        showSnackbar(getString(R.string.empty_fields_error))
     }
 
     private fun showPasswordMismatch() {
-        showToast(getString(R.string.password_mismatch_error))
+        showSnackbar(getString(R.string.password_mismatch_error))
     }
 
     private fun onRegistrationSuccess() {
         loadingEnd()
-        showToast(getString(R.string.registration_successful))
+        showSnackbar(getString(R.string.registration_successful))
         navigateToMain()
     }
 
     private fun onRegistrationFailure() {
         loadingEnd()
-        showToast(getString(R.string.registration_failed))
+        showSnackbar(getString(R.string.registration_failed))
     }
 
 
-    private fun showToast(message: String) {
-        Toast.makeText(this@LoginActivity, message, Toast.LENGTH_SHORT).show()
+    private fun showSnackbar(message: String) {
+        Snackbar.make(guestButton, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun navigateToRegistration() {

@@ -28,6 +28,11 @@ class BrowseFragment : Fragment() {
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
     }
@@ -37,13 +42,13 @@ class BrowseFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2) // 2 cards per row
 
         val data = listOf(
-            CategoryAdapter.CategoryItem("Fast Food", R.drawable.c1),
-            CategoryAdapter.CategoryItem("Breakfast and Brunch", R.drawable.c2),
-            CategoryAdapter.CategoryItem("Coffe and Tea", R.drawable.c3),
+            CategoryAdapter.CategoryItem("Burger", R.drawable.c1),
+            CategoryAdapter.CategoryItem("Breakfast", R.drawable.c2),
+            CategoryAdapter.CategoryItem("Coffe", R.drawable.c3),
             CategoryAdapter.CategoryItem("Pizza", R.drawable.c4),
-            CategoryAdapter.CategoryItem("Desserts", R.drawable.c5),
+            CategoryAdapter.CategoryItem("Cake", R.drawable.c5),
             CategoryAdapter.CategoryItem("Indian", R.drawable.c6),
-            CategoryAdapter.CategoryItem("Chinese", R.drawable.c7),
+            CategoryAdapter.CategoryItem("Noodle", R.drawable.c7),
             CategoryAdapter.CategoryItem("Vegan", R.drawable.c8)
         )
 

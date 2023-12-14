@@ -12,14 +12,23 @@
     android:gravity="center"
     android:padding="30dp">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="0dp"
+        app:lottie_rawRes="@raw/loginfood"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="2"
         android:orientation="horizontal"
         android:layout_gravity="center_vertical"
         android:gravity="center"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="0dp">
 
         <TextView
             android:id="@+id/appTitleTextView"
@@ -30,7 +39,8 @@
             android:text="@string/app_name"
             android:textColor="?attr/colorPrimary"
             android:textSize="64sp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="0dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -180,7 +190,8 @@
         android:hint="@string/confirm_password"
         app:startIconDrawable="@drawable/ic_password"
         android:id="@+id/passwordConfirmTextField"
-        android:layout_marginBottom="12sp">
+        android:layout_marginBottom="12sp"
+        android:nextFocusForward="@id/registerButton">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
