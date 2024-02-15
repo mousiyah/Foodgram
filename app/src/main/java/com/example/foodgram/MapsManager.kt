@@ -12,7 +12,7 @@ import com.example.foodgram.R
 
 class MapsManager() {
 
-    private val mapsAPIkey = "AIzaSyD56CgJp9BOrChCvQh3h6l9-VJGX7hRqZk"
+    private val mapsAPIkey = "REPLACE WITH YOUR GOOGLE API KEY"
     var placesClient: PlacesClient? = null
 
     fun initializePlacesAPI(applicationContext: Context) {
