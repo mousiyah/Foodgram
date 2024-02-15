@@ -1,5 +1,5 @@
 # Foodgram
-Native android app to find the best places to eat! Leave reviews about restaurants/cafes you dine in!
+Native android app to find the best places to eat! Leave reviews about restaurants/cafes you dine in! Made with Android Studio, Kotlin, Firebase
 
 <div style="display: flex; flex-wrap: wrap;">
     <a href="url"><img src="https://github.com/mousiyah/Foodgram/assets/40555448/affd8e16-4dcd-452f-8475-f3d5f91c65dd" style="width: 24%; margin: 0;"></a>
