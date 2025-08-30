@@ -5,6 +5,12 @@ To compile the app please edit:
 private val mapsAPIkey = "REPLACE WITH YOUR GOOGLE API KEY" at Foodgram/app/src/main/java/com/example/foodgram
 /MapsManager.kt
 
+
+Demo video:
+
+https://github.com/user-attachments/assets/1475735e-abb8-417a-9dd7-74e5a157925e
+
+
 <div style="display: flex; flex-wrap: wrap;">
     <a href="url"><img src="https://github.com/mousiyah/Foodgram/assets/40555448/affd8e16-4dcd-452f-8475-f3d5f91c65dd" style="width: 24%; margin: 0;"></a>
     <a href="url"><img src="https://github.com/mousiyah/Foodgram/assets/40555448/b6daee7e-8e4a-49f6-ba8c-4bca50040c7d" style="width: 24%; margin: 0;"></a>
@@ -14,4 +20,5 @@ private val mapsAPIkey = "REPLACE WITH YOUR GOOGLE API KEY" at Foodgram/app/src/
     <a href="url"><img src="https://github.com/mousiyah/Foodgram/assets/40555448/7c46d9c6-e0c5-469b-8629-9f048c29d1bc" style="width: 24%; margin: 0;"></a>
     <a href="url"><img src="https://github.com/mousiyah/Foodgram/assets/40555448/e372fb67-da81-4e3d-a52c-a3492193249e" style="width: 24%; margin: 0;"></a>
 </div>
+
 
